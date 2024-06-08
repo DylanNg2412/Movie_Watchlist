@@ -4,14 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
 
-import {
-  Typography,
-  Button,
-  Card,
-  CardContent,
-  Box,
-  CardActionArea,
-} from "@mui/material";
+import { Typography, Button, Card, Box } from "@mui/material";
 import { deleteMovie } from "../../utils/api_movies";
 import { addToWatchlist } from "../../utils/api_watchlist";
 
@@ -27,17 +20,13 @@ export default function MovieCard(props) {
 
   return (
     <Card
-      sx={{
-        width: "100%",
-        height: "80%",
-        margin: "20px",
-      }}
+      className="movie-card"
       onClick={() => {
         navigate("/movie-details/" + movie._id);
       }}
     >
-      <img
-        className="poster"
+      <Box
+        component="img"
         src={
           "http://localhost:5000/" +
           (movie.image && movie.image !== ""
@@ -45,13 +34,16 @@ export default function MovieCard(props) {
             : "uploads/default_image.png")
         }
         alt={movie.title}
-        style={{
-          width: "100%",
-          height: "100%",
-          top: 0,
-          left: 0,
-        }}
       />
+      <Box className="movie-card-overlay">
+        <Typography
+          variant="h6"
+          className="movie-card-title"
+          sx={{ textTransform: "uppercase" }}
+        >
+          {movie.title}
+        </Typography>
+      </Box>
     </Card>
   );
 }

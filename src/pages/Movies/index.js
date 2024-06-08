@@ -37,6 +37,7 @@ export default function Movies() {
     queryFn: () => getMovies(search, genre, sort), // pass in the genre to filter out the product
   });
 
+  console.log(movies);
   // load the genres
   const { data: genres = [] } = useQuery({
     queryKey: ["genres"],
@@ -72,7 +73,7 @@ export default function Movies() {
   return (
     <>
       <Header />
-      <Box sx={{ padding: "20px" }}>
+      <Box sx={{ margin: "30px" }}>
         <Box
           sx={{
             display: "flex",
@@ -98,7 +99,7 @@ export default function Movies() {
         container
         rowSpacing={2}
         columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-        sx={{ paddingTop: "20px" }}
+        sx={{ margin: "30px" }}
       >
         {movies && movies.length > 0 ? (
           movies.map((movie) => (

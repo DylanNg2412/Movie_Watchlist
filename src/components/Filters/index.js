@@ -11,6 +11,8 @@ function Filters(props) {
     onSortChange,
   } = props;
 
+  console.log(props);
+
   return (
     <div className="filters">
       {/* search by keywords */}

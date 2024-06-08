@@ -24,7 +24,7 @@ export const addToWatchlist = async (data) => {
 };
 
 // update status only
-export const updatedWatchlist = async (data) => {
+export const updateWatchlist = async (data) => {
   const response = await axios.put(
     `${url}/watchlist/${data._id}`,
     JSON.stringify(data),
@@ -46,6 +46,7 @@ export const updatedWatchlist = async (data) => {
 export const removeFromWatchlist = async (data) => {
   const response = await axios.delete(`${url}/watchlist/${data._id}`, {
     headers: {
+      "Content-Type": "application/json",
       Authorization: "Bearer " + data.token,
     },
   });
