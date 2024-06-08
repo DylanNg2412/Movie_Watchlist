@@ -8,6 +8,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -28,6 +29,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import UpdateIcon from "@mui/icons-material/Update";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -130,6 +132,9 @@ export default function GenrePage() {
           padding: "20px",
           marginBottom: "20px",
           border: "1px solid #ddd",
+          borderRadius: 2,
+          overflow: "hidden",
+          boxShadow: 3,
         }}
       >
         <TextField
@@ -151,66 +156,84 @@ export default function GenrePage() {
           <AddIcon />
         </Button>
       </Box>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell width={"70%"}>Name</TableCell>
-            <TableCell align="left">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {genres.length > 0 ? (
-            genres.map((item) => {
-              return (
-                <TableRow key={item._id}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: "10px",
-                      }}
-                    >
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          // open the edit modal
-                          setOpenEditModal(true);
-                          // set the edit genre field to its name as value
-                          setEditGenreName(item.name);
-                          // set the edit genre id so that we know which genre to update
-                          setEditGenreID(item._id);
-                        }}
-                      >
-                        <EditIcon />
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => {
-                          deleteGenreMutation.mutate({
-                            _id: item._id,
-                            token: token,
-                          });
-                        }}
-                      >
-                        <DeleteIcon />
-                      </Button>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              );
-            })
-          ) : (
+      <Box sx={{ borderRadius: 2, overflow: "hidden", boxShadow: 3 }}>
+        <Table component={Paper}>
+          <TableHead>
             <TableRow>
-              <TableCell colSpan={2} align="center">
-                No genre found.
-              </TableCell>
+              <TableCell width={"70%"}>Name</TableCell>
+              <TableCell align="left">Actions</TableCell>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {genres.length > 0 ? (
+              genres.map((item) => {
+                return (
+                  <TableRow key={item._id}>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: "10px",
+                        }}
+                      >
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {
+                            // open the edit modal
+                            setOpenEditModal(true);
+                            // set the edit genre field to its name as value
+                            setEditGenreName(item.name);
+                            // set the edit genre id so that we know which genre to update
+                            setEditGenreID(item._id);
+                          }}
+                        >
+                          <EditIcon />
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => {
+                            deleteGenreMutation.mutate({
+                              _id: item._id,
+                              token: token,
+                            });
+                          }}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell colSpan={2} align="center">
+                  No genre found.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </Box>
+
+      <div style={{ textAlign: "center", marginTop: "1rem" }}>
+        <Button
+          onClick={() => {
+            navigate("/dashboard");
+          }}
+          variant="body2"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ArrowBackIcon sx={{ mr: 1 }} /> Back
+        </Button>
+      </div>
 
       <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
         <DialogTitle>Edit Genre</DialogTitle>

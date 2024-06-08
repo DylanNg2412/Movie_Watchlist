@@ -72,7 +72,7 @@ export default function Movies() {
   return (
     <>
       <Header />
-      <Container sx={{ paddingTop: "20px" }}>
+      <Box sx={{ padding: "20px" }}>
         <Box
           sx={{
             display: "flex",
@@ -93,23 +93,27 @@ export default function Movies() {
         <Typography variant="h6" style={{ fontWeight: "bold" }}>
           Movies
         </Typography>
-        <Grid item container spacing={2} sx={{ paddingTop: "20px" }}>
-          {movies
-            ? movies.map((movie) => (
-                <Grid key={movie._id} item lg={4} md={6} xs={12}>
-                  <MovieCard movie={movie} />
-                </Grid>
-              ))
-            : null}
-          {movies && movies.length === 0 ? (
-            <Grid item xs={12}>
-              <Typography align="center" sx={{ padding: "10px 0" }}>
-                No movies found.
-              </Typography>
+      </Box>
+      <Grid
+        container
+        rowSpacing={2}
+        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+        sx={{ paddingTop: "20px" }}
+      >
+        {movies && movies.length > 0 ? (
+          movies.map((movie) => (
+            <Grid key={movie._id} item xs={12} sm={6} md={2}>
+              <MovieCard movie={movie} />
             </Grid>
-          ) : null}
-        </Grid>
-      </Container>
+          ))
+        ) : (
+          <Grid item xs={12}>
+            <Typography align="center" sx={{ padding: "10px 0" }}>
+              No movies found.
+            </Typography>
+          </Grid>
+        )}
+      </Grid>
     </>
   );
 }

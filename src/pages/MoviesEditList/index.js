@@ -1,19 +1,12 @@
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import Header from "../../components/Header";
@@ -26,6 +19,8 @@ import {
 } from "../../utils/api_movies";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -55,7 +50,7 @@ export default function MovieEditList() {
       console.log("Fetched movies:", data);
     },
     onError: (error) => {
-      console.error("Error fetching mvoies:", error);
+      console.error("Error fetching movies:", error);
     },
   });
 
@@ -145,52 +140,24 @@ export default function MovieEditList() {
             Add New
           </Button>
         </div>
-        {/* <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        gap: "10px",
-        padding: "20px",
-        marginBottom: "20px",
-        border: "1px solid #ddd",
-      }}
-    >
-      <TextField
-        label="Genre Name"
-        variant="outlined"
-        sx={{ width: "100%" }}
-        value={genre}
-        onChange={(e) => setGenre(e.target.value)}
-      />
-      <Button
-        variant="contained"
-        onClick={() => {
-          addNewGenreMutation.mutate({
-            name: genre,
-            token: token,
-          });
-        }}
-      >
-        Add
-      </Button>
-    </Box> */}
         <Table>
           <TableHead>
             <TableRow align="center">
               <TableCell width={"70%"}>Title</TableCell>
-              <TableCell align="left">Actions</TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {movies.length > 0 ? (
               movies.map((movie) => {
                 return (
-                  <TableRow key={movie._id}>
+                  <TableRow key={movie._id} align="center">
                     <TableCell>{movie.title}</TableCell>
                     <TableCell>
                       <Box
                         sx={{
                           display: "flex",
+                          justifyContent: "flex-end",
                           gap: "10px",
                         }}
                       >
@@ -229,35 +196,21 @@ export default function MovieEditList() {
             )}
           </TableBody>
         </Table>
-
-        {/* <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
-      <DialogTitle>Edit Genre</DialogTitle>
-      <DialogContent>
-        <TextField
-          label="Name"
-          variant="outlined"
-          sx={{ width: "100%", marginTop: "15px" }}
-          value={editGenreName}
-          onChange={(e) => setEditGenreName(e.target.value)}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => setOpenEditModal(false)}>Cancel</Button>
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => {
-            updateGenreMutation.mutate({
-              _id: editGenreID,
-              name: editGenreName,
-              token: token,
-            });
-          }}
-        >
-          Update
-        </Button>
-      </DialogActions>
-    </Dialog> */}
+        <div style={{ textAlign: "center", marginTop: "1rem" }}>
+          <Button
+            onClick={() => {
+              navigate("/dashboard");
+            }}
+            variant="body2"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ArrowBackIcon sx={{ mr: 1 }} /> Back
+          </Button>
+        </div>
       </Container>
     </>
   );

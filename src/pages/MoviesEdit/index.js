@@ -34,6 +34,7 @@ export default function MoviesEdit() {
   const [release_date, setRelease_date] = useState("");
   const [director, setDirector] = useState("");
   const [cast, setCast] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
 
   // get data from movie api: /movies/:id
@@ -64,6 +65,7 @@ export default function MoviesEdit() {
       setRelease_date(movie.release_date);
       setDirector(movie.director);
       setCast(movie.cast);
+      setDescription(movie.description);
       setImage(movie.image ? movie.image : "");
     }
   }, [movie]);
@@ -96,6 +98,7 @@ export default function MoviesEdit() {
       release_date: release_date,
       director: director,
       cast: cast,
+      description: description,
       image: image,
       token: token,
     });
@@ -229,6 +232,18 @@ export default function MoviesEdit() {
                   fullWidth
                   value={cast}
                   onChange={(e) => setCast(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  id="outlined-multiline-static"
+                  multiline
+                  rows={5}
+                  variant="outlined"
+                  label="Description"
+                  fullWidth
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>

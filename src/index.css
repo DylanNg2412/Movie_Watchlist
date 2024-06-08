@@ -33,3 +33,20 @@ code {
   height: 30px;
   border-radius: 5px;
 }
+
+.poster {
+  margin-right: 20px;
+  background: rgb(48, 48, 62);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.poster:hover {
+  opacity: 1;
+  transition: box-shadow 0.25s ease-in-out, transform 0.25s ease-in-out;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.9));
+  filter: blur(2px);
+}

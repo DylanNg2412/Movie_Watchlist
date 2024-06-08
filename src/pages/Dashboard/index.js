@@ -70,8 +70,8 @@ export default function Dashboard() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid xs={3}></Grid>
-          <Grid item xs={12} sm={6} xsOffset={3}>
+          <Grid item xs={3}></Grid>
+          <Grid item xs={12} sm={6} xsoffset={3}>
             <Card>
               <CardContent sx={{ textAlign: "center" }}>
                 <div>

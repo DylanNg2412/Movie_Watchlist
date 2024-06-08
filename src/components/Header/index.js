@@ -40,10 +40,11 @@ export default function Header() {
             Home
           </Button>
           <Button
-            style={{
-              color: location.pathname === "/watchlist" ? "white" : "inherit",
+            sx={{
+              textUnderlineOffset: "10px",
+              color: location.pathname === "/watchlist" ? "none" : "inherit",
               textDecoration:
-                location.pathname === "/watchlist" ? "#underline" : "none",
+                location.pathname === "/watchlist" ? "underline" : "none",
             }}
             onClick={() => {
               navigate("/watchlist");
@@ -55,10 +56,11 @@ export default function Header() {
             <>
               <Button
                 sx={{
+                  textUnderlineOffset: "10px",
                   color:
-                    location.pathname === "/dashboard" ? "white" : "inherit",
-                  backgroundColor:
-                    location.pathname === "/dashboard" ? "#238be6" : "inherit",
+                    location.pathname === "/dashboard" ? "none" : "inherit",
+                  textDecoration:
+                    location.pathname === "/dashboard" ? "underline" : "none",
                 }}
                 onClick={() => {
                   navigate("/dashboard");
@@ -87,9 +89,10 @@ export default function Header() {
           <Box sx={{ display: "flex" }}>
             <Button
               sx={{
-                color: location.pathname === "/login" ? "white" : "inherit",
-                backgroundColor:
-                  location.pathname === "/login" ? "#238be6" : "inherit",
+                textUnderlineOffset: "10px",
+                color: location.pathname === "/login" ? "none" : "inherit",
+                textDecoration:
+                  location.pathname === "/login" ? "underline" : "none",
               }}
               onClick={() => {
                 navigate("/login");
@@ -99,9 +102,10 @@ export default function Header() {
             </Button>
             <Button
               sx={{
-                color: location.pathname === "/signup" ? "white" : "inherit",
-                backgroundColor:
-                  location.pathname === "/signup" ? "#238be6" : "inherit",
+                textUnderlineOffset: "10px",
+                color: location.pathname === "/signup" ? "none" : "inherit",
+                textDecoration:
+                  location.pathname === "/signup" ? "underline" : "none",
               }}
               onClick={() => {
                 navigate("/signup");

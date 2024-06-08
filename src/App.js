@@ -41,7 +41,7 @@ function App() {
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/genres" element={<GenrePage />} />
-                <Route path="/moviedetails" element={<MovieDetails />} />
+                <Route path="/movie-details/:id" element={<MovieDetails />} />
                 <Route path="/manage-movies" element={<MovieEditList />} />
                 <Route path="/manage-users" element={<UserPage />} />
               </Routes>

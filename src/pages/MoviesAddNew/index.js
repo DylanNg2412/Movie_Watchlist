@@ -24,6 +24,8 @@ import { getGenres } from "../../utils/api_genres";
 import { uploadImage } from "../../utils/api_images";
 import { useCookies } from "react-cookie";
 
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 export default function MoviesAddNew() {
   const navigate = useNavigate();
   const [cookies] = useCookies(["currentUser"]);
@@ -36,6 +38,7 @@ export default function MoviesAddNew() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [director, setDirector] = useState("");
   const [cast, setCast] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
 
   const [release_date, setRelease_date] = useState(null);
@@ -73,6 +76,7 @@ export default function MoviesAddNew() {
       release_date: release_date,
       director: director,
       cast: cast,
+      description: description,
       image: image,
       token: token,
     });
@@ -133,48 +137,6 @@ export default function MoviesAddNew() {
                 />
               </Grid>
               <Grid item xs={12}>
-                {/* <FormControl
-                  sx={{ marginTop: "10px", width: "200px", marginLeft: "10px" }}
-                >
-                  <InputLabel id="product-select-label">Category</InputLabel>
-                  <Select
-                    labelId="product-select-label"
-                    id="product-select"
-                    label="Category"
-                    value={category}
-                    onChange={(event) => {
-                      setCategory(event.target.value);
-                    }}
-                  >
-                    {categories.map((category) => {
-                      return (
-                        <MenuItem key={category._id} value={category._id}>
-                          {category.name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl> */}
-                {/* <FormControl fullWidth>
-                  <InputLabel id="product-select">Genre</InputLabel>
-                  <Select
-                    labelId="product-select-label"
-                    id="product-select"
-                    label="Genre"
-                    variant="outlined"
-                    multiple
-                    value={selectedGenres}
-                    onChange={(event) => {
-                      setSelectedGenres(event.target.value);
-                    }}
-                  >
-                    {genres.map((genre) => (
-                      <MenuItem key={genre._id} value={genre._id}>
-                        {genre.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl> */}
                 <Box sx={{ width: "100%" }}>
                   <Autocomplete
                     multiple
@@ -237,6 +199,15 @@ export default function MoviesAddNew() {
                 />
               </Grid>
               <Grid item xs={12}>
+                <TextField
+                  label="Description"
+                  variant="outlined"
+                  fullWidth
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
                 {image !== "" ? (
                   <>
                     <div>
@@ -262,12 +233,27 @@ export default function MoviesAddNew() {
                   fullWidth
                   onClick={handleFormSubmit}
                 >
-                  Update
+                  Add
                 </Button>
               </Grid>
             </Grid>
           </CardContent>
         </Card>
+        <div style={{ textAlign: "center", marginTop: "1rem" }}>
+          <Button
+            onClick={() => {
+              navigate("/manage-movies");
+            }}
+            variant="body2"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ArrowBackIcon sx={{ mr: 1 }} /> Back
+          </Button>
+        </div>
       </Container>
     </>
   );

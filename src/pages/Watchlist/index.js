@@ -16,7 +16,8 @@ export default function Watchlist() {
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["currentUser"]);
   const { currentUser = {} } = cookies;
-  const { token } = currentUser;
+  const { token, _id } = currentUser;
+  console.log(currentUser._id);
 
   const { data: watchlist = [] } = useQuery({
     queryKey: ["watchlist", token],
@@ -48,6 +49,8 @@ export default function Watchlist() {
     }
   };
 
+  const userWatchlist = watchlist.filter((movie) => movie.user === _id);
+
   return (
     <>
       <Header />
@@ -63,8 +66,8 @@ export default function Watchlist() {
           Your Watchlist
         </Typography>
         <Grid item container spacing={3} sx={{ paddingTop: "20px" }}>
-          {watchlist && watchlist.length > 0 ? (
-            watchlist.map((item) => (
+          {userWatchlist.length > 0 ? (
+            userWatchlist.map((item) => (
               <React.Fragment key={item._id}>
                 {item.movies.map((movie) => (
                   <Grid key={movie._id} item lg={4} md={6} xs={12}>
