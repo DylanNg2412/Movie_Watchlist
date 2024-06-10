@@ -41,9 +41,10 @@ export const addMovies = async (data) => {
   return response.data;
 };
 
+// only update the status
 export const updateMovie = async (data) => {
   const response = await axios.put(
-    `${url}/movies/${data.id}`,
+    `${url}/movies/${data._id}`,
     JSON.stringify(data),
     {
       headers: {

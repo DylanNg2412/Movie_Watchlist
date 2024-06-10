@@ -5,6 +5,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #121212;
+}
+
+.bg-color {
+  background-color: #121212;
 }
 
 code {
@@ -29,7 +34,7 @@ code {
 .filters input,
 .filters select {
   margin-right: 10px;
-  width: 200px;
+  width: 50%;
   height: 30px;
   border-radius: 5px;
 }

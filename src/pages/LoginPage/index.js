@@ -3,7 +3,16 @@ import { useMutation } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
 
-import { Box, Container, TextField, Button } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
 
@@ -43,39 +52,80 @@ export default function LoginPage() {
   return (
     <>
       <Header />
-      <Container sx={{ marginTop: "20px", width: "30%" }}>
-        <Box sx={{ marginBottom: "30px" }}>
-          <TextField
-            label="Email"
-            type="email"
-            value={email}
-            required
-            variant="outlined"
-            color="info"
-            fullWidth
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Box>
-        <Box sx={{ marginBottom: "30px" }}>
-          <TextField
-            label="Password"
-            type="password"
-            value={password}
-            required
-            variant="outlined"
-            color="info"
-            fullWidth
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Box>
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          onClick={handleLogin}
-        >
-          Login
-        </Button>
+      <Container maxWidth="sm">
+        <Card sx={{ mt: 4, border: "1px solid white" }}>
+          <CardContent sx={{ backgroundColor: "#121212" }}>
+            <Grid container spacing={3} sx={{ p: 2, color: "white" }}>
+              <Grid item xs={12}>
+                <Typography>Email</Typography>
+                <TextField
+                  required
+                  fullWidth
+                  variant="outlined"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "white",
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography>Password</Typography>
+                <TextField
+                  required
+                  fullWidth
+                  variant="outlined"
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "white",
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  sx={{
+                    fontWeight: "bold",
+                    color: "black",
+                    backgroundColor: "#f5c518",
+                    textTransform: "capitalize",
+                  }}
+                  onClick={handleLogin}
+                >
+                  Login
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    mt: 2,
+                  }}
+                >
+                  <Typography>Don't have an account yet?</Typography>
+                  <Button
+                    sx={{ ml: 1, textTransform: "capitalize" }}
+                    onClick={() => {
+                      navigate("/signup");
+                    }}
+                  >
+                    Sign Up
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
       </Container>
     </>
   );

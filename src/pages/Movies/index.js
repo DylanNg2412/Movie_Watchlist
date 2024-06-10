@@ -1,17 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-  FormControl,
-  Select,
-  InputLabel,
-  MenuItem,
-  Container,
-} from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 
 import Header from "../../components/Header";
 import { getMovies } from "../../utils/api_movies";
@@ -20,10 +10,9 @@ import MovieCard from "../../components/MovieCard";
 import Filters from "../../components/Filters";
 
 export default function Movies() {
-  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [genre, setGenre] = useState("all");
-  const [sort, setSort] = useState("");
+  const [sort, setSort] = useState("default");
 
   /* Load data */
 
@@ -37,7 +26,6 @@ export default function Movies() {
     queryFn: () => getMovies(search, genre, sort), // pass in the genre to filter out the product
   });
 
-  console.log(movies);
   // load the genres
   const { data: genres = [] } = useQuery({
     queryKey: ["genres"],
@@ -70,51 +58,54 @@ export default function Movies() {
   //   if (isError) {
   //     return <h2>No movies found.</h2>;
   //   }
+
   return (
     <>
       <Header />
-      <Box sx={{ margin: "30px" }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Filters
-            search={search}
-            genre={genre}
-            genres={genres}
-            sort={sort}
-            onGenreChange={handleGenreChange}
-            onSearchChange={handleSearchChange}
-            onSortChange={handleSortChange}
-          />
+      <Container maxWidth={false}>
+        <Box sx={{ margin: "30px" }}>
+          <Box>
+            <Filters
+              search={search}
+              genre={genre}
+              genres={genres}
+              sort={sort}
+              onGenreChange={handleGenreChange}
+              onSearchChange={handleSearchChange}
+              onSortChange={handleSortChange}
+            />
+          </Box>
+          <Typography
+            variant="h6"
+            style={{ fontWeight: "bold", color: "white" }}
+          >
+            Movies
+          </Typography>
         </Box>
-        <Typography variant="h6" style={{ fontWeight: "bold" }}>
-          Movies
-        </Typography>
-      </Box>
-      <Grid
-        container
-        rowSpacing={2}
-        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-        sx={{ margin: "30px" }}
-      >
-        {movies && movies.length > 0 ? (
-          movies.map((movie) => (
-            <Grid key={movie._id} item xs={12} sm={6} md={2}>
-              <MovieCard movie={movie} />
+        <Grid
+          container
+          rowSpacing={2}
+          columnSpacing={{ xs: 2, md: 3 }}
+          sx={{ margin: "30px" }}
+        >
+          {movies && movies.length > 0 ? (
+            movies.map((movie) => (
+              <Grid key={movie._id} item xs={6} md={4} lg={2}>
+                <MovieCard movie={movie} />
+              </Grid>
+            ))
+          ) : (
+            <Grid item xs={12}>
+              <Typography
+                align="center"
+                sx={{ padding: "10px 0", color: "white" }}
+              >
+                No movies found.
+              </Typography>
             </Grid>
-          ))
-        ) : (
-          <Grid item xs={12}>
-            <Typography align="center" sx={{ padding: "10px 0" }}>
-              No movies found.
-            </Typography>
-          </Grid>
-        )}
-      </Grid>
+          )}
+        </Grid>
+      </Container>
     </>
   );
 }

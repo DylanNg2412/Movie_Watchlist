@@ -1,4 +1,12 @@
 import React from "react";
+import {
+  Box,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 function Filters(props) {
   const {
@@ -11,65 +19,60 @@ function Filters(props) {
     onSortChange,
   } = props;
 
-  console.log(props);
-
   return (
-    <div className="filters">
+    <Box
+      className="filters"
+      sx={{
+        display: "flex",
+        gap: "10px",
+        alignItems: "center",
+        marginBottom: "20px",
+        maxWidth: "750px",
+      }}
+    >
       {/* search by keywords */}
-      <input
+      <TextField
+        sx={{
+          flex: 2,
+          "& .MuiOutlinedInput-root": {
+            backgroundColor: "white",
+          },
+        }}
+        variant="outlined"
         placeholder="Search keywords.."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
       />
 
-      {/* <FormControl
-        sx={{
-          marginTop: "10px",
-          width: "200px",
-          marginLeft: "10px",
-          marginBottom: "20px",
-        }}
-      >
-        <InputLabel id="product-select-label">Genre</InputLabel>
-        <Select
-          labelId="product-select-label"
-          id="product-select"
-          label="Genre"
-          value={genre}
-          onChange={(event) => {
-            onGenreChange(event.target.value);
-          }}
-        >
-          <MenuItem value="all">Default</MenuItem>
-          {genres.map((g) => {
-            return (
-              <MenuItem key={g._id} value={g._id}>
-                {g.name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl> */}
-
       {/* filter by genre */}
-      <select onChange={(e) => onGenreChange(e.target.value)} value={genre}>
-        <option value={"all"}>Default</option>
-        {genres.map((g) => {
-          return (
-            <option key={g._id} value={g._id}>
+      <FormControl sx={{ m: 1, flex: 1 }}>
+        <Select
+          value={genre}
+          onChange={(e) => onGenreChange(e.target.value)}
+          sx={{ backgroundColor: "white", width: "100%" }}
+        >
+          <MenuItem value="all">All</MenuItem>
+          {genres.map((g) => (
+            <MenuItem key={g._id} value={g.name}>
               {g.name}
-            </option>
-          );
-        })}
-      </select>
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
-      {/* sort by released date or country using selector */}
-      <select onChange={(e) => onSortChange(e.target.value)} value={sort}>
-        <option value={""}>Default</option>
-        <option value={"country"}>Country</option>
-        <option value={"release_date"}>Year</option>
-      </select>
-    </div>
+      {/* sort by released date or country */}
+      <FormControl sx={{ m: 1, flex: 1 }}>
+        <Select
+          value={sort}
+          onChange={(e) => onSortChange(e.target.value)}
+          sx={{ backgroundColor: "white", width: "100%" }}
+        >
+          <MenuItem value="default">Sort</MenuItem>
+          <MenuItem value="country">Country</MenuItem>
+          <MenuItem value="release_date">Year</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
   );
 }
 

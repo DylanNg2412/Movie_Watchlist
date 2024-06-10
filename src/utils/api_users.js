@@ -23,7 +23,6 @@ export const addUser = async (data) => {
 
 // update role only
 export const updateUser = async (data) => {
-  console.log(data);
   const response = await axios.put(
     `${url}/user/${data._id}`,
     JSON.stringify(data),

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
@@ -6,14 +6,20 @@ import { useCookies } from "react-cookie";
 import {
   Typography,
   Button,
-  Card,
-  CardContent,
   Box,
   Grid,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
+  Container,
+  Card,
+  CardContent,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddIcon from "@mui/icons-material/Add";
@@ -23,8 +29,8 @@ import { getMovie } from "../../utils/api_movies";
 import {
   addToWatchlist,
   getWatchlists,
-  removeFromWatchlist,
-  updateWatchlist, // Make sure you have this function in your api_watchlist
+  getWatchlist,
+  updateWatchlist,
 } from "../../utils/api_watchlist";
 import Header from "../../components/Header";
 
@@ -38,11 +44,24 @@ export default function MovieDetails() {
   const queryClient = useQueryClient();
 
   const [inWatchlist, setIsInWatchlist] = useState(false);
-  const [status, setStatus] = useState(""); // New state for status
+  const [status, setStatus] = useState("");
+
+  /* for dialog */
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  /* end - dialog*/
 
   const { data: watchlist = [] } = useQuery({
-    queryKey: ["watchlist", token],
-    queryFn: () => getWatchlists(token),
+    queryKey: ["watchlist", id, token],
+    queryFn: () => getWatchlist(id, token),
+    enabled: !!token,
   });
 
   const { data: movie = {} } = useQuery({
@@ -52,11 +71,10 @@ export default function MovieDetails() {
 
   const addToWatchlistMutation = useMutation({
     mutationFn: addToWatchlist,
-    onSuccess: () => {
+    onSuccess: (data) => {
       enqueueSnackbar("Movie has been added to your watchlist", {
         variant: "success",
       });
-      setIsInWatchlist(true);
       queryClient.invalidateQueries({
         queryKey: ["watchlist"],
       });
@@ -68,196 +86,225 @@ export default function MovieDetails() {
     },
   });
 
-  const deleteWatchlistMutation = useMutation({
-    mutationFn: removeFromWatchlist,
-    onSuccess: () => {
-      enqueueSnackbar("Movie has been removed from your watchlist", {
-        variant: "success",
-      });
-      setIsInWatchlist(false);
-
-      queryClient.invalidateQueries({
-        queryKey: ["watchlist"],
-      });
-    },
-    onError: (error) => {
-      enqueueSnackbar(error.message.data.message, {
-        variant: "error",
-      });
-    },
-  });
-
-  const updateStatusMutation = useMutation({
-    mutationFn: updateWatchlist, // Assuming this is the function to update the status
-    onSuccess: () => {
-      enqueueSnackbar("Status updated successfully", {
+  const updateMovieMutation = useMutation({
+    mutationFn: updateWatchlist,
+    onSuccess: (data) => {
+      console.log(data);
+      enqueueSnackbar("Status has been successfully updated", {
         variant: "success",
       });
       queryClient.invalidateQueries({
+        queryKey: ["movie", id, token],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["watchlist"],
       });
     },
     onError: (error) => {
-      enqueueSnackbar(error.message.data.message, {
+      enqueueSnackbar(error.response.data.message, {
         variant: "error",
       });
     },
   });
+
+  const handleUpdateMovie = (movie_id) => {
+    updateMovieMutation.mutate({
+      _id: movie_id,
+      status: status,
+      token: token,
+    });
+    handleClose();
+  };
+
+  const handleAddToWatchlist = () => {
+    if (!currentUser.role) {
+      enqueueSnackbar(
+        "You need to be logged in to add a movie to your watchlist",
+        {
+          variant: "warning",
+        }
+      );
+    } else {
+      addToWatchlistMutation.mutate({
+        movie_id: movie._id,
+        token,
+      });
+    }
+  };
 
   useEffect(() => {
-    const watchlistItem = watchlist.find((item) =>
-      item.movies.some((m) => m._id.toString() === movie._id)
-    );
-    if (watchlistItem) {
-      setIsInWatchlist(true);
-      setStatus(watchlistItem.status); // Assuming the watchlist item has a status field
+    if (watchlist) {
+      setStatus(watchlist.status);
+    } else {
+      setIsInWatchlist(false);
     }
-  }, [watchlist, movie._id]);
+  }, [watchlist]);
 
   return (
     <>
-      <Header />
-      <Grid
-        container
-        spacing={2}
-        columns={12}
-        justifyContent="center"
-        alignItems="center"
-        sx={{ minHeight: "90vh" }}
+      <Container
+        maxWidth="lg"
+        sx={{
+          marginTop: 4,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "90vh",
+        }}
       >
-        <Grid item xs={4}>
-          <Box
-            sx={{
-              width: "65%",
-              height: "100%",
-              margin: "auto",
-              borderRadius: "5px",
-            }}
-            component="img"
-            src={
-              "http://localhost:5000/" +
-              (movie.image && movie.image !== ""
-                ? movie.image
-                : "uploads/default_image.png")
-            }
-            alt={movie.title}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h3">{movie.title}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>{movie.description}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>
-                Country: <strong>{movie.country}</strong>
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>
-                Genres:{" "}
-                <strong>
-                  {movie.genres?.map((genre) => genre.name).join(", ")}
-                </strong>
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>
-                Released Date: <strong>{movie.release_date}</strong>
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>
-                Director: <strong>{movie.director}</strong>
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>
-                Cast: <strong>{movie.cast}</strong>
-              </Typography>
-            </Grid>
-            {inWatchlist ? (
-              <Grid>
-                <Grid item xs={12}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                      if (currentUser && currentUser.email) {
-                        deleteWatchlistMutation.mutate({
-                          _id: movie._id,
-                          token,
-                        });
-                      } else {
-                        enqueueSnackbar("Please login first", {
-                          variant: "warning",
-                        });
-                      }
-                    }}
-                    sx={{ marginBottom: "10px" }}
-                  >
-                    <CheckIcon sx={{ marginRight: "10px" }} />
-                    In Watchlist
-                  </Button>
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="Age"
+        <Card variant="outlined">
+          <CardContent>
+            <Grid container spacing={4} justifyContent="center">
+              <Grid item xs={12} sm={4}>
+                <Box
+                  component="img"
+                  src={
+                    movie.image
+                      ? `http://localhost:5000/${movie.image}`
+                      : "/default_image.png"
+                  }
+                  alt={movie.title}
+                  sx={{ width: "100%", borderRadius: 1 }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <Typography variant="h3" gutterBottom>
+                  {movie.title}
+                </Typography>
+                <Typography paragraph>{movie.description}</Typography>
+                <Typography>
+                  Country: <strong>{movie.country}</strong>
+                </Typography>
+                <Typography>
+                  Genres:
+                  <strong>
+                    {" "}
+                    {movie.genres?.map((genre) => genre.name).join(", ")}
+                  </strong>
+                </Typography>
+                <Typography>
+                  Released Date: <strong>{movie.release_date}</strong>
+                </Typography>
+                <Typography>
+                  Director: <strong>{movie.director}</strong>
+                </Typography>
+                <Typography>
+                  Cast: <strong>{movie.cast}</strong>
+                </Typography>
+
+                {currentUser.role && watchlist ? (
+                  <>
+                    <Typography>
+                      Status: <strong>{status}</strong>
+                    </Typography>
+                    <Grid
+                      container
+                      spacing={2}
+                      alignItems="center"
+                      sx={{ marginTop: 3 }}
                     >
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Button
+                          fullWidth
+                          sx={{
+                            backgroundColor: "#f5c518",
+                            color: "black",
+                            fontWeight: "bold",
+                          }}
+                          onClick={handleClickOpen}
+                        >
+                          Edit Status
+                        </Button>
+                        <Dialog open={open} onClose={handleClose}>
+                          <DialogTitle>Edit Movie Status</DialogTitle>
+                          <DialogContent>
+                            <DialogContentText>
+                              Change the status of the movie.
+                            </DialogContentText>
+                            <FormControl fullWidth>
+                              <Select
+                                labelId="status-select-label"
+                                id="status-select"
+                                value={status}
+                                onChange={(event) => {
+                                  setStatus(event.target.value);
+                                }}
+                              >
+                                <MenuItem value={"Want to watch"}>
+                                  Want to watch
+                                </MenuItem>
+                                <MenuItem value={"Watching"}>Watching</MenuItem>
+                                <MenuItem value={"Watched"}>Watched</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </DialogContent>
+                          <DialogActions>
+                            <Button onClick={handleClose} color="primary">
+                              Cancel
+                            </Button>
+                            <Button
+                              onClick={() => handleUpdateMovie(movie._id)}
+                              color="primary"
+                            >
+                              Save
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Button
+                          fullWidth
+                          sx={{
+                            backgroundColor: "#f5c518",
+                            color: "black",
+                            fontWeight: "bold",
+                          }}
+                          onClick={() =>
+                            addToWatchlistMutation.mutate({
+                              movie_id: movie._id,
+                              token,
+                            })
+                          }
+                        >
+                          <CheckIcon sx={{ mr: 1 }} />
+                          In Watchlist
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </>
+                ) : (
+                  <Button
+                    fullWidth
+                    sx={{
+                      backgroundColor: "#f5c518",
+                      color: "black",
+                      fontWeight: "bold",
+                      mt: 3,
+                    }}
+                    onClick={handleAddToWatchlist}
+                  >
+                    <AddIcon sx={{ mr: 1 }} />
+                    Add To Watchlist
+                  </Button>
+                )}
               </Grid>
-            ) : (
-              <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    if (currentUser && currentUser.email) {
-                      addToWatchlistMutation.mutate({ movie, token });
-                    } else {
-                      enqueueSnackbar("Please login first", {
-                        variant: "warning",
-                      });
-                    }
-                  }}
-                  sx={{ marginBottom: "10px" }}
-                >
-                  <AddIcon sx={{ marginRight: "10px" }} />
-                  Add To Watchlist
-                </Button>
-              </Grid>
-            )}
-          </Grid>
-        </Grid>
-        <Grid item xs={16} textAlign="center">
-          <Button
-            onClick={() => {
-              navigate("/");
-            }}
-            variant="body2"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginLeft: "10px",
-            }}
-          >
-            <ArrowBackIcon sx={{ mr: 1 }} /> Back To Watchlist
-          </Button>
-        </Grid>
-      </Grid>
+            </Grid>
+          </CardContent>
+          <Box textAlign="center" sx={{ py: 2 }}>
+            <Button
+              onClick={() => navigate("/")}
+              sx={{
+                backgroundColor: "#f5c518",
+                color: "black",
+                fontWeight: "bold",
+              }}
+              endIcon={<ArrowBackIcon />}
+            >
+              Back To Watchlist
+            </Button>
+          </Box>
+        </Card>
+      </Container>
     </>
   );
 }

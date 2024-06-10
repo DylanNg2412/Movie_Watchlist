@@ -20,6 +20,8 @@ import { uploadImage } from "../../utils/api_images";
 import { useCookies } from "react-cookie";
 import { getGenres } from "../../utils/api_genres";
 
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 export default function MoviesEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -91,7 +93,7 @@ export default function MoviesEdit() {
     const genreNames = selectedGenres.map((genre) => genre._id);
     // to trigger the mutation to call the API
     updateMovieMutation.mutate({
-      id: id,
+      _id: id,
       title: title,
       country: country,
       genres: genreNames,
@@ -141,145 +143,216 @@ export default function MoviesEdit() {
 
   return (
     <>
-      <Header />
-      <Container>
-        <Card>
-          <CardContent>
-            <Typography
-              variant="h4"
-              sx={{
-                margin: "20px 0",
-                fontWeight: "bold",
-                textAlign: "center",
-              }}
-            >
-              Edit Movie
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  label="Title"
-                  variant="outlined"
-                  fullWidth
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Country"
-                  variant="outlined"
-                  fullWidth
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Autocomplete
-                  multiple
-                  id="tags-standard"
-                  options={genresData}
-                  getOptionLabel={(option) => option.name}
-                  value={selectedGenres}
-                  onChange={(event, newValue) => {
-                    setSelectedGenres(newValue);
+      {currentUser && currentUser.role ? (
+        <>
+          <Header />
+          <Container maxWidth="md">
+            <Card>
+              <CardContent>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    margin: "20px 0",
+                    fontWeight: "bold",
+                    textAlign: "center",
                   }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      label="Genre"
-                      placeholder="Select genres"
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          "& fieldset": {
-                            borderColor: "rgba(0, 0, 0, 0.23",
-                          },
-                          "&:hover fieldset": {
-                            borderColor: "primary.main",
-                          },
-                          "&.Mui-focused fieldset": {
-                            borderColor: "primary.main",
-                          },
-                        },
-                      }}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Released Date"
-                  variant="outlined"
-                  fullWidth
-                  value={release_date}
-                  onChange={(e) => setRelease_date(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Director"
-                  variant="outlined"
-                  fullWidth
-                  value={director}
-                  onChange={(e) => setDirector(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Cast"
-                  variant="outlined"
-                  fullWidth
-                  value={cast}
-                  onChange={(e) => setCast(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  id="outlined-multiline-static"
-                  multiline
-                  rows={5}
-                  variant="outlined"
-                  label="Description"
-                  fullWidth
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                {image !== "" ? (
-                  <>
-                    <div>
-                      <img
-                        src={"http://localhost:5000/" + image}
-                        width="300px"
-                        height="300px"
-                      />
-                    </div>
-                    <Button onClick={() => setImage("")}>Remove Image</Button>
-                  </>
-                ) : (
-                  <input
-                    type="file"
-                    multiple={false}
-                    onChange={handleImageUpload}
-                  />
-                )}
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  onClick={handleFormSubmit}
                 >
-                  Update
-                </Button>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Container>
+                  Edit Movie
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Title"
+                      variant="outlined"
+                      fullWidth
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Country"
+                      variant="outlined"
+                      fullWidth
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Autocomplete
+                      multiple
+                      id="tags-standard"
+                      options={genresData}
+                      getOptionLabel={(option) => option.name}
+                      value={selectedGenres}
+                      onChange={(event, newValue) => {
+                        setSelectedGenres(newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          label="Genre"
+                          placeholder="Select genres"
+                          sx={{
+                            "& .MuiOutlinedInput-root": {
+                              "& fieldset": {
+                                borderColor: "rgba(0, 0, 0, 0.23",
+                              },
+                              "&:hover fieldset": {
+                                borderColor: "primary.main",
+                              },
+                              "&.Mui-focused fieldset": {
+                                borderColor: "primary.main",
+                              },
+                            },
+                          }}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Released Date"
+                      variant="outlined"
+                      fullWidth
+                      value={release_date}
+                      onChange={(e) => setRelease_date(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Director"
+                      variant="outlined"
+                      fullWidth
+                      value={director}
+                      onChange={(e) => setDirector(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Cast"
+                      variant="outlined"
+                      fullWidth
+                      value={cast}
+                      onChange={(e) => setCast(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      id="outlined-multiline-static"
+                      multiline
+                      rows={3}
+                      variant="outlined"
+                      label="Description"
+                      fullWidth
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    {image !== "" ? (
+                      <>
+                        <div>
+                          <img
+                            src={"http://localhost:5000/" + image}
+                            width="300px"
+                            height="300px"
+                          />
+                        </div>
+                        <Button
+                          sx={{
+                            color: "black",
+                            fontWeight: "bold",
+                            "&:hover": {
+                              backgroundColor: "#d32f2f",
+                              border: "1px solid #d32f2f",
+                            },
+                          }}
+                          onClick={() => setImage("")}
+                        >
+                          Remove Image
+                        </Button>
+                      </>
+                    ) : (
+                      <input
+                        type="file"
+                        multiple={false}
+                        onChange={handleImageUpload}
+                      />
+                    )}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      onClick={handleFormSubmit}
+                      sx={{
+                        color: "black",
+                        backgroundColor: "#f5c518",
+                        fontWeight: "bold",
+                        width: "100%",
+                      }}
+                    >
+                      Update
+                    </Button>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+            <div style={{ textAlign: "center", marginTop: "1rem" }}>
+              <Button
+                onClick={() => {
+                  navigate("/manage-movies");
+                }}
+                variant="body2"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "white",
+                  fontWeight: "bold",
+                }}
+              >
+                <ArrowBackIcon sx={{ mr: 1 }} /> Back
+              </Button>
+            </div>
+          </Container>
+        </>
+      ) : (
+        <Container
+          maxWidth="lg"
+          sx={{
+            color: "white",
+            marginTop: 4,
+            height: "90vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center", // To ensure text is centered as well
+          }}
+        >
+          <Typography fontSize={"150px"}>UwU</Typography>
+          <Typography fontSize={"40px"}>Watchu doin?</Typography>
+          <Button
+            onClick={() => {
+              navigate("/");
+            }}
+            sx={{
+              color: "black",
+              backgroundColor: "#f5c518",
+              fontWeight: "bold",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "10px",
+            }}
+          >
+            HOME
+          </Button>
+        </Container>
+      )}
     </>
   );
 }

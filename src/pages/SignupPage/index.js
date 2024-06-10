@@ -1,9 +1,11 @@
 import {
+  Box,
   Button,
   Card,
   CardContent,
   Container,
   Grid,
+  Link,
   TextField,
   Typography,
 } from "@mui/material";
@@ -61,11 +63,17 @@ export default function SignUpPage() {
     <>
       <Header />
       <Container maxWidth="sm">
-        <Card sx={{ mt: 4 }}>
-          <CardContent>
-            <Grid container spacing={3} sx={{ p: 2 }}>
+        <Card sx={{ mt: 4, border: "1px solid white" }}>
+          <CardContent sx={{ backgroundColor: "#121212" }}>
+            <Grid container spacing={3} sx={{ p: 2, color: "white" }}>
               <Grid item xs={12}>
-                <Typography>Name</Typography>
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  Name
+                </Typography>
                 <TextField
                   required
                   fullWidth
@@ -73,10 +81,21 @@ export default function SignUpPage() {
                   placeholder="Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "white",
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography>Email</Typography>
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  Email
+                </Typography>
                 <TextField
                   required
                   fullWidth
@@ -84,10 +103,21 @@ export default function SignUpPage() {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "white",
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography>Password</Typography>
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  Password
+                </Typography>
                 <TextField
                   required
                   fullWidth
@@ -96,31 +126,69 @@ export default function SignUpPage() {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "white",
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography>Confirm Password</Typography>
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  Confirm Password
+                </Typography>
                 <TextField
                   required
                   fullWidth
                   variant="outlined"
                   type="password"
-                  placeholder="Password"
+                  placeholder="Confirm Password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "white",
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <Button
                   fullWidth
-                  variant="contained"
-                  style={{
+                  sx={{
+                    fontWeight: "bold",
+                    color: "black",
+                    backgroundColor: "#f5c518",
                     textTransform: "capitalize",
                   }}
                   onClick={handleSignUp}
                 >
                   Sign Up
                 </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    mt: 2,
+                  }}
+                >
+                  <Typography>Already have an account?</Typography>
+                  <Button
+                    sx={{ ml: 1 }}
+                    onClick={() => {
+                      navigate("/login");
+                    }}
+                  >
+                    Log In
+                  </Button>
+                </Box>
               </Grid>
             </Grid>
           </CardContent>
