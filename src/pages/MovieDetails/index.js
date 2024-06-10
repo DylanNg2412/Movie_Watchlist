@@ -159,9 +159,10 @@ export default function MovieDetails() {
                 <Box
                   component="img"
                   src={
-                    movie.image
-                      ? `http://localhost:5000/${movie.image}`
-                      : "/default_image.png"
+                    "http://localhost:5000/" +
+                    (movie.image && movie.image !== ""
+                      ? movie.image
+                      : "uploads/default_image.png")
                   }
                   alt={movie.title}
                   sx={{ width: "100%", borderRadius: 1 }}

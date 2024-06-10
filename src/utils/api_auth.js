@@ -12,9 +12,11 @@ export const getUserLogin = async (data) => {
 };
 
 export const getUserSignUp = async (data) => {
+  console.log(data);
   const response = await axios.post(
     `${url}/user/signup`,
     JSON.stringify(data),
+
     {
       headers: {
         "Content-Type": "application/json",

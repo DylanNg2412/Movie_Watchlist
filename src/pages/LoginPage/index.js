@@ -114,7 +114,7 @@ export default function LoginPage() {
                 >
                   <Typography>Don't have an account yet?</Typography>
                   <Button
-                    sx={{ ml: 1, textTransform: "capitalize" }}
+                    sx={{ ml: 1 }}
                     onClick={() => {
                       navigate("/signup");
                     }}

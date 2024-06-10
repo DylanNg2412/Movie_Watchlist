@@ -6,6 +6,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  useMediaQuery,
 } from "@mui/material";
 
 function Filters(props) {
@@ -19,15 +20,19 @@ function Filters(props) {
     onSortChange,
   } = props;
 
+  const isMobile = useMediaQuery("(max-width:600px)");
+
   return (
     <Box
       className="filters"
       sx={{
         display: "flex",
+        flexDirection: isMobile ? "column" : "row",
         gap: "10px",
-        alignItems: "center",
+        alignItems: isMobile ? "stretch" : "center",
         marginBottom: "20px",
         maxWidth: "750px",
+        width: "100%",
       }}
     >
       {/* search by keywords */}
@@ -42,10 +47,17 @@ function Filters(props) {
         placeholder="Search keywords.."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
+        fullWidth={isMobile}
       />
 
       {/* filter by genre */}
-      <FormControl sx={{ m: 1, flex: 1 }}>
+      <FormControl
+        sx={{
+          flex: 1,
+          width: isMobile ? "100%" : "auto",
+          mt: isMobile ? 1 : 0,
+        }}
+      >
         <Select
           value={genre}
           onChange={(e) => onGenreChange(e.target.value)}
@@ -61,7 +73,13 @@ function Filters(props) {
       </FormControl>
 
       {/* sort by released date or country */}
-      <FormControl sx={{ m: 1, flex: 1 }}>
+      <FormControl
+        sx={{
+          flex: 1,
+          width: isMobile ? "100%" : "auto",
+          mt: isMobile ? 1 : 0,
+        }}
+      >
         <Select
           value={sort}
           onChange={(e) => onSortChange(e.target.value)}

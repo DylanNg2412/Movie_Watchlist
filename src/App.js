@@ -25,7 +25,7 @@ function App() {
         <CookiesProvider defaultSetOptions={{ path: "/" }}>
           <SnackbarProvider
             maxSnack={10}
-            autoHideDuration={2000}
+            autoHideDuration={1500}
             anchorOrigin={{
               vertical: "top",
               horizontal: "right",

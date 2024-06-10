@@ -173,13 +173,24 @@ export default function MoviesAddNew() {
                       />
                     </Box>
                   </Grid>
-                  <Grid item xs={12}>
+                  {/* <Grid item xs={12}>
                     <TextField
                       label="Released Date"
                       variant="outlined"
                       fullWidth
                       value={release_date || ""}
                       onChange={(e) => setRelease_date(e.target.value)}
+                    />
+                  </Grid> */}
+                  <Grid item xs={12}>
+                    <TextField
+                      type="date"
+                      variant="outlined"
+                      fullWidth
+                      value={release_date}
+                      onChange={(event) => {
+                        setRelease_date(event.target.value);
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12}>

@@ -106,7 +106,7 @@ export default function UserPage() {
         variant: "success",
       });
       queryClient.invalidateQueries({
-        queryKey: ["movies"],
+        queryKey: ["users"],
       });
     },
     onError: (error) => {

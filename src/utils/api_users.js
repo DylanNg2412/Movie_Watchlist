@@ -37,7 +37,7 @@ export const updateUser = async (data) => {
 };
 
 export const deleteUser = async (data) => {
-  const response = await axios.delete(`${url}/user${data._id}`, {
+  const response = await axios.delete(`${url}/user/${data._id}`, {
     headers: {
       Authorization: "Bearer " + data.token,
     },
