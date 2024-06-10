@@ -159,7 +159,7 @@ export default function MovieDetails() {
                 <Box
                   component="img"
                   src={
-                    "http://localhost:5000/" +
+                    "http://10.1.104.9:5000/" +
                     (movie.image && movie.image !== ""
                       ? movie.image
                       : "uploads/default_image.png")

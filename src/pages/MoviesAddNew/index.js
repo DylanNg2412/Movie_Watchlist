@@ -228,7 +228,7 @@ export default function MoviesAddNew() {
                       <>
                         <div>
                           <img
-                            src={"http://localhost:5000/" + image}
+                            src={"http://10.1.104.9:5000/" + image}
                             width="300px"
                             height="300px"
                           />
