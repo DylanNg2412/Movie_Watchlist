@@ -46,7 +46,7 @@ export default function Watchlist() {
                   const { movie } = m;
                   return (
                     <Grid key={movie._id} item sm={6} md={2} xs={12}>
-                      <MovieCard movie={movie} isInWatchlist={true} />
+                      <MovieCard movie={movie?._id} isInWatchlist={true} />
                     </Grid>
                   );
                 })

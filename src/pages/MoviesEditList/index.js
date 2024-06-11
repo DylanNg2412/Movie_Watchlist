@@ -57,7 +57,7 @@ export default function MovieEditList() {
       });
     },
     onError: (error) => {
-      enqueueSnackbar(error.message.data.message, {
+      enqueueSnackbar(error.response.data.message, {
         variant: "error",
       });
     },

@@ -155,7 +155,7 @@ export default function UserPage() {
                   letterSpacing: "0.1em",
                 }}
                 onClick={() => {
-                  navigate("/user-add");
+                  navigate("/movie");
                 }}
               >
                 Add New
